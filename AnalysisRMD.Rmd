@@ -1,30 +1,62 @@
 ---
-title: "AnalysisRMD"
+title: "TS% Analysis"
 author: "Nick Olech"
 date: "2024-10-24"
 output: html_document
----
+--- 
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## NBA center analysis
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+I do not believe that Nikola Vucevic played like a top 20 center last season. In a somewhat bad faith analysis, I will look to calculate some advanced analytics from the NBA season last year.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Import Dataset
+```{r}
+library(readxl)
+setwd(choose.dir())
+list.files()
 
-```{r cars}
-summary(cars)
+
+# List all files
+csv_files <- list.files(pattern = "\\.csv$")
+
+# Read each file and store in a list
+data_list <- lapply(csv_files, read.csv)
+
+# 
+names(data_list) <- csv_files
+
+# Make dataset
+nba_data <- do.call(rbind, lapply(csv_files, read.csv))
 ```
-dd
-## Including Plots
 
-You can also embed plots, for example:
+## Criteria for Centers
+1. Any effective NBA scorer should maintain a relatively high TS%
+    - In order to account for volume, I will filter by a ppg benchmark
+2. Any effective NBA scorer should maintain a high Asst/TOV ratio
+    In order to account for volume, I will filter my minnimun assists
+    
+    
+## Filter all of our data for the center position
+```{r}
+library(dplyr)
+library(tidyr)
+library(tidyverse)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+centers_filtered <- nba_data %>%
+  filter(Pos == "C" | Pos == "C-PF") %>%  
+  select(FGA, FT., PTS, G, AST, TOV) 
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Use included variables to calculate the true shooting percentage
+```{r}
+
+```
+
+
+
+
