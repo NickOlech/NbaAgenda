@@ -16,12 +16,12 @@ I do not believe that Nikola Vucevic played like a top 20 center last season. In
 ## Import Dataset
 ```{r}
 library(readxl)
-setwd(choose.dir())
+setwd("C:/Users/nicko/OneDrive/Desktop/Github/Project 2/NbaAgenda/NBADATA")
 list.files()
-
 
 # List all files
 csv_files <- list.files(pattern = "\\.csv$")
+print(csv_files)
 
 # Read each file and store in a list
 data_list <- lapply(csv_files, read.csv)
