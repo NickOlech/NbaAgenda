@@ -36,11 +36,23 @@ nba_data <- do.call(rbind, lapply(csv_files, read.csv))
 ## Criteria for Centers
 1. Any effective NBA scorer should maintain a relatively high TS%
     - In order to account for volume, I will filter by a ppg benchmark
-2. Any effective NBA scorer should maintain a high Asst/TOV ratio
-    In order to account for volume, I will filter my minnimun assists
+2. An all around  NBA scorer should maintain a high Asst/TOV ratio
+    - In order to account for volume, I will filter my minimum assists
+3. There are not enough statistics to calculate advanced defensive stats, advanced defensive analytics also 
+have some more flaws opposed to offensive ones
+   - I.e. lack of on/off ball context 
     
     
 ## Filter all of our data for the center position
+
+Also add a column for for total points scored and a column for total points from fts.
+
+Can also calculate Assist:TOV Ratio with apg/tov (per game)
+
+True shooting percentage is calculated as follows
+
+TS% = (Total Points Scored)/(2*(FG attempts + .44FT Attempts))
+
 ```{r}
 library(dplyr)
 library(tidyr)
@@ -48,11 +60,18 @@ library(tidyverse)
 
 centers_filtered <- nba_data %>%
   filter(Pos == "C" | Pos == "C-PF") %>%  
-  select(FGA, FT., PTS, G, AST, TOV) 
+  select(Player, Pos, MP, FGA, FT., FTA, PTS, G, AST, TOV, PTS) %>%
+  mutate(
+    total_points = round(PTS*G),
+    ft_Points = round(FT.*FTA*G),
+    ast_tov_ratio = round(AST/TOV, 2)
+  ) %>%
+  mutate_all(~ ifelse(is.na(.) | is.nan(.) | is.infinite(.), "", .))  
 
 ```
 
-## Use included variables to calculate the true shooting percentage
+## Now lets make some graph to see the overall landscape of centers in the nba
+
 ```{r}
 
 ```
